@@ -28,3 +28,18 @@ SELECT customer_id, COUNT (DISTINCT order_date) as days_visited
 FROM sales
 GROUP BY customer_id
 
+-- 3. What was the first item from the menu purchased by each customer?
+WITH added_row_number AS (SELECT
+  *,
+  ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as row_count
+FROM dannys_diner.sales)
+SELECT customer_id, menu.product_name
+FROM 
+added_row_number
+LEFT OUTER JOIN
+    dannys_diner.menu
+ON
+    added_row_number.product_id = menu.product_id
+WHERE row_count = 1
+
+
