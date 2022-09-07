@@ -2,8 +2,6 @@
    Case Study Questions
    --------------------*/
 
--- 3. What was the first item from the menu purchased by each customer?
--- 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 -- 5. Which item was the most popular for each customer?
 -- 6. Which item was purchased first by the customer after they became a member?
 -- 7. Which item was purchased just before the customer became a member?
@@ -42,4 +40,16 @@ ON
     added_row_number.product_id = menu.product_id
 WHERE row_count = 1
 
+
+
+-- 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+SELECT product_name as menu_item, count(order_date) as purchases
+FROM dannys_diner.sales
+LEFT OUTER JOIN
+    dannys_diner.menu
+ON
+    sales.product_id = menu.product_id
+GROUP BY menu_item
+ORDER BY purchases DESC
+Limit 1
 
